@@ -17,7 +17,8 @@ func run(day string) {
 	default:
 		log.Fatal("unexpected day")
 	case "day01":
-		log.Printf("%s solution: %v", day, day01.SolutionA(input))
+		log.Printf("%s solution a: %v", day, day01.SolutionA(input))
+		log.Printf("%s solution b: %v", day, day01.SolutionB(input))
 	}
 }
 

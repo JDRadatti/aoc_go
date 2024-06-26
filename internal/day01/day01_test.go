@@ -24,15 +24,24 @@ func TestDay01a(t *testing.T) {
 
 func TestDay01b(t *testing.T) {
 	inputs := [][]byte{
-		[]byte(`two1nine
+		[]byte("sdfmjthreeldkm\n",), 
+		[]byte("onetwo\n",), 
+		[]byte("fiveight\n",), 
+		[]byte("threeoneight\n",), 
+        []byte(`two1nine
 eightwothree
 abcone2threexyz
 xtwone3four
 4nineeightseven2
 zoneight234
-7pqrstsixteen`),
+7pqrstsixteen
+`),
 	}
 	expected := [...]int{
+        33,
+        12,
+        58,
+        38,
 		281,
 	}
 	for i := 0; i < len(inputs); i++ {
