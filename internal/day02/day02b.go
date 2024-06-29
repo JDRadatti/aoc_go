@@ -5,9 +5,7 @@ type Cubes map[byte]int
 func (c *Cubes) powerSet() int {
     result := 1
     for _, value := range *c {
-        if value != 0 {
-            result *= value
-        }
+        result *= value
     }
     return result
 }
