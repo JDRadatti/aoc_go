@@ -24,6 +24,7 @@ func run(day string) {
         solutionB = day01.SolutionB(input)
 	case "day02":
 		solutionA = day02.SolutionA(input)
+		solutionB = day02.SolutionB(input)
 	}
     log.Printf("%s solution a: %v", day, solutionA)
 	log.Printf("%s solution b: %v", day, solutionB)
