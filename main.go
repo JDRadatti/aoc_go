@@ -4,6 +4,7 @@ import (
 	"github.com/JDRadatti/aoc_go/inputs"
 	"github.com/JDRadatti/aoc_go/internal/day01"
 	"github.com/JDRadatti/aoc_go/internal/day02"
+	"github.com/JDRadatti/aoc_go/internal/day03"
 	"log"
 	"os"
 )
@@ -25,6 +26,9 @@ func run(day string) {
 	case "day02":
 		solutionA = day02.SolutionA(input)
 		solutionB = day02.SolutionB(input)
+    case "day03":
+		solutionA = day03.SolutionA(input)
+		solutionB = day03.SolutionB(input)
 	}
     log.Printf("%s solution a: %v", day, solutionA)
 	log.Printf("%s solution b: %v", day, solutionB)
