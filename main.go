@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/JDRadatti/aoc_go/inputs"
 	"github.com/JDRadatti/aoc_go/internal/day01"
+	"github.com/JDRadatti/aoc_go/internal/day02"
 	"log"
 	"os"
 )
