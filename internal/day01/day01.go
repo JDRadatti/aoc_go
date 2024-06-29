@@ -2,9 +2,9 @@ package day01
 
 // SolutionA sums (first * 10 + last) of each line in input
 // where first is the first digit and last is the last digit.
-// Example: 
+// Example:
 // input = "1jvsl2/nk3four5/n"
-// SolutionA(input) = 12 + 35 = 47 
+// SolutionA(input) = 12 + 35 = 47
 func SolutionA(input []byte) int {
 	values := 0
 	first, last := -1, -1
@@ -29,7 +29,7 @@ func SolutionA(input []byte) int {
 
 // SolutionB is the same as SolutionA with the caveat that
 // spelled numbers, like "nine" also count as digits
-// Example: 
+// Example:
 // input = "1jvsl2/nk3four/n"
 // SolutionA(input) = 12 + 34 = 46
 func SolutionB(input []byte) int {
