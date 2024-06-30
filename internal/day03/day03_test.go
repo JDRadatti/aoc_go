@@ -36,13 +36,23 @@ func TestDay03a(t *testing.T) {
 
 func TestDay03b(t *testing.T) {
 	inputs := [][]byte{
-		[]byte(``),
+		[]byte(`467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..
+`),
 	}
 	expected := [...]int{
-		0,
+		467835,
 	}
 	for i := 0; i < len(inputs); i++ {
-		result := SolutionA(inputs[i])
+		result := SolutionB(inputs[i])
 
 		if expected[i] != result {
 			t.Errorf("Expected %d but got %d", expected[i], result)

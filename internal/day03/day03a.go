@@ -6,10 +6,6 @@ import (
 
 // https://adventofcode.com/2023/day/3
 func SolutionA(schematic []byte) int {
-    // convert to graph where symbol is edge and number is node
-    // add nodes for each graph with an edge
-    // adjaceny matrix
-    // 
     graph := graphs.Graph{}
     graph.InitFromSchematic(schematic)
 
@@ -17,6 +13,18 @@ func SolutionA(schematic []byte) int {
     sum := 0
     for n := range graph.Nodes {
         sum += n.Value
+    }
+	return sum
+}
+
+func SolutionB(schematic []byte) int {
+    graph := graphs.Graph{}
+    graph.InitFromSchematic(schematic)
+
+
+    sum := 0
+    for e := range graph.Edges {
+        sum += graph.Edges[e].GearRatio()
     }
 	return sum
 }

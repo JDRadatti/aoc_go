@@ -15,6 +15,19 @@ type Node struct {
 
 type Edge struct {
 	neighbors map[Node]struct{}
+	IsGear    bool
+}
+
+func (e *Edge) GearRatio() int {
+	if !e.IsGear {
+		return 0
+	}
+
+	gearRatio := 1
+	for neighbor := range e.neighbors {
+		gearRatio *= neighbor.Value
+	}
+	return gearRatio
 }
 
 func (edge *Edge) addNeighbor(node Node) {
@@ -54,7 +67,7 @@ func (graph *Graph) InitFromSchematic(schematic []byte) {
 	var split [][]byte = bytes.Split(schematic, []byte("\n"))
 	var nodes [][]*Node
 	var nilNode *Node = &Node{Value: 0}
-    id := 0
+	id := 0
 
 	// First pass, init 2D array of Nodes
 	// Edge is a node with id = -1
@@ -64,13 +77,13 @@ func (graph *Graph) InitFromSchematic(schematic []byte) {
 		}
 
 		nodes = append(nodes, []*Node{})
-        currNode := &Node{}
+		currNode := &Node{}
 		for col := 0; col < len(split[row]); col++ {
 			curr := split[row][col]
 			if curr >= 48 && curr <= 57 {
 				currNode.updateID(curr)
-                currNode.Id = id
-                id += 1
+				currNode.Id = id
+				id += 1
 				nodes[row] = append(nodes[row], currNode)
 			} else if curr == 46 { // curr byte is a "."
 				currNode = &Node{}
@@ -104,9 +117,13 @@ func (graph *Graph) InitFromSchematic(schematic []byte) {
 					}
 				}
 			}
+			if split[row][col] == '*' && len(edge.neighbors) == 2 {
+				edge.IsGear = true
+			}
 			if len(edge.neighbors) > 0 {
 				graph.addEdge(edge)
 			}
+
 		}
 	}
 }
