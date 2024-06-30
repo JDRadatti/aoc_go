@@ -17,6 +17,7 @@ func SolutionA(schematic []byte) int {
 	return sum
 }
 
+// https://adventofcode.com/2023/day/3
 func SolutionB(schematic []byte) int {
     graph := graphs.Graph{}
     graph.InitFromSchematic(schematic)
