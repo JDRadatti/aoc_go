@@ -2,6 +2,7 @@ package day04
 
 import (
 	"bytes"
+    "log"
 	"math"
 )
 
@@ -10,10 +11,13 @@ func SolutionA(input []byte) int {
 	cards := bytes.Split(input, []byte("\n"))
 	sum := 0.0
 	for c := range cards {
+        if len(cards[c]) == 0 {
+            continue
+        }
 		card := Card{}
 		card.processCard(cards[c])
-		if card.matchingCount > 0 {
-			sum += math.Pow(float64(2), float64(card.matchingCount-1))
+		if card.MatchingCount > 0 {
+			sum += math.Pow(float64(2), float64(card.MatchingCount-1))
 		}
 	}
 	return int(sum)
@@ -21,20 +25,37 @@ func SolutionA(input []byte) int {
 
 // https://adventofcode.com/2023/day/4
 func SolutionB(input []byte) int {
-	cards := bytes.Split(input, []byte("\n"))
-	for c := range cards {
-		card := Card{}
-		card.processCard(cards[c])
-
+	lines := bytes.Split(input, []byte("\n"))
+	cards := []Card{}
+	for c := range lines {
+        if len(lines[c]) == 0 {
+            continue
+        }
+		card := Card{Copies: 1}
+		card.processCard(lines[c])
+		cards = append(cards, card)
 	}
-	return 0
+
+	for c := range cards {
+		card := cards[c]
+		for i := range card.MatchingCount { 
+			cards[c + i + 1].Copies += card.Copies // Guaranteed to be in bounds
+		}
+	}
+
+	totalCopies := 0
+	for c := range cards {
+        log.Println(cards[c].Id, cards[c].Copies)
+		totalCopies += cards[c].Copies
+	}
+
+	return totalCopies
 }
-
-
 
 type Card struct {
 	Id            int
-	matchingCount int
+	MatchingCount int
+	Copies        int
 }
 
 func (c *Card) processCard(card []byte) {
@@ -42,13 +63,13 @@ func (c *Card) processCard(card []byte) {
 	if len(tokens) <= 1 {
 		return
 	}
-    t := 1 // Skip "Game"
+	t := 1 // Skip "Game"
 	for len(tokens[t]) == 0 {
-        t++
+		t++
 	} // Skip extra spaces
 
 	c.Id = BAtoI(tokens[t][:len(tokens[t])-1])
-    t++
+	t++
 
 	numbersBefore := map[int]struct{}{}
 	for t < len(tokens) {
@@ -57,9 +78,9 @@ func (c *Card) processCard(card []byte) {
 			break
 		}
 
-        if n := BAtoI(tokens[t]); n != 0 { // ignore whitespace
-              numbersBefore[n] = struct{}{}
-        }
+		if n := BAtoI(tokens[t]); n != 0 { // ignore whitespace
+			numbersBefore[n] = struct{}{}
+		}
 		t++
 	}
 
@@ -67,7 +88,7 @@ func (c *Card) processCard(card []byte) {
 		currNumber := BAtoI(tokens[t])
 		if _, ok := numbersBefore[currNumber]; ok {
 			if currNumber != 0 {
-				c.matchingCount++
+				c.MatchingCount++
 			}
 		}
 		t++
@@ -82,5 +103,3 @@ func BAtoI(bytes []byte) int {
 	}
 	return value
 }
-
-
