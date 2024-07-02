@@ -40,7 +40,7 @@ humidity-to-location map:
 `),
 	}
 	expected := [...]int{
-        0,
+        35,
 	}
 	for i := 0; i < len(inputs); i++ {
 		result := SolutionA(inputs[i])
