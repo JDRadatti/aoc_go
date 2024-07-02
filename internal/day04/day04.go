@@ -3,6 +3,7 @@ package day04
 import (
 	"bytes"
     "log"
+	"github.com/JDRadatti/aoc_go/pkg/utils"
 	"math"
 )
 
@@ -68,7 +69,7 @@ func (c *Card) processCard(card []byte) {
 		t++
 	} // Skip extra spaces
 
-	c.Id = BAtoI(tokens[t][:len(tokens[t])-1])
+	c.Id = utils.BAtoI(tokens[t][:len(tokens[t])-1])
 	t++
 
 	numbersBefore := map[int]struct{}{}
@@ -78,14 +79,14 @@ func (c *Card) processCard(card []byte) {
 			break
 		}
 
-		if n := BAtoI(tokens[t]); n != 0 { // ignore whitespace
+		if n := utils.BAtoI(tokens[t]); n != 0 { // ignore whitespace
 			numbersBefore[n] = struct{}{}
 		}
 		t++
 	}
 
 	for t < len(tokens) {
-		currNumber := BAtoI(tokens[t])
+		currNumber := utils.BAtoI(tokens[t])
 		if _, ok := numbersBefore[currNumber]; ok {
 			if currNumber != 0 {
 				c.MatchingCount++
@@ -93,13 +94,4 @@ func (c *Card) processCard(card []byte) {
 		}
 		t++
 	}
-}
-
-// BAtoI converts a Byte Array to Int
-func BAtoI(bytes []byte) int {
-	value := 0
-	for i := range bytes {
-		value = value*10 + int(bytes[i]) - '0'
-	}
-	return value
 }
