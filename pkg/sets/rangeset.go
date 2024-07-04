@@ -83,8 +83,8 @@ func (self *RangeSet) Add(start int, end int) {
 		}
 	} else {
 		if start > startRange.End && end < endRange.Start { // cx
-            self.Delete(startIndex+1, endIndex)
-            self.Insert(NewRange(start, end), startIndex+1)
+			self.Delete(startIndex+1, endIndex)
+			self.Insert(NewRange(start, end), startIndex+1)
 		} else if end < endRange.Start { // ax or bx
 			startRange.UpdateStart(utils.Min(start, startRange.Start))
 			startRange.UpdateEnd(utils.Max(end, startRange.End))
@@ -141,16 +141,16 @@ func (self *RangeSet) Search(elem int) int {
 		if low == high {
 			mid = high
 		} else {
-            mid = low + ((high - low + 1) / 2)
-        }
+			mid = low + ((high - low + 1) / 2)
+		}
 		if self.Ranges[mid].Contains(elem) {
 			return mid
 		} else if self.Ranges[mid].Compare(elem) < 0 {
-			high = mid-1
+			high = mid - 1
 		} else {
-			low = mid+1
-		} 	
-    }
+			low = mid + 1
+		}
+	}
 	return utils.Min(self.size()-1, low)
 	// Returns -1 * (low + 1) for where to insert(gutter)
 }
