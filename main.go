@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/JDRadatti/aoc_go/inputs"
+	"github.com/JDRadatti/aoc_go/pkg/utils"
 	"github.com/JDRadatti/aoc_go/internal/day01"
 	"github.com/JDRadatti/aoc_go/internal/day02"
 	"github.com/JDRadatti/aoc_go/internal/day03"
@@ -17,30 +18,36 @@ func run(day string) {
 		log.Fatalf("failed to read input for %s \n%v", day, err)
 	}
 
-    solutionA, solutionB := 0, 0 
+    var solutionA (func([]byte) int)
+    var solutionB (func([]byte) int)
 
 	switch day {
 	default:
 		log.Fatal("unexpected day")
 	case "day01":
-		solutionA = day01.SolutionA(input)
-        solutionB = day01.SolutionB(input)
+		solutionA = day01.SolutionA
+        solutionB = day01.SolutionB
 	case "day02":
-		solutionA = day02.SolutionA(input)
-		solutionB = day02.SolutionB(input)
+		solutionA = day02.SolutionA
+		solutionB = day02.SolutionB
     case "day03":
-		solutionA = day03.SolutionA(input)
-		solutionB = day03.SolutionB(input)
+		solutionA = day03.SolutionA
+		solutionB = day03.SolutionB
     case "day04":
-		solutionA = day04.SolutionA(input)
-		solutionB = day04.SolutionB(input)
+		solutionA = day04.SolutionA
+		solutionB = day04.SolutionB
     case "day05":
-		solutionA = day05.SolutionA(input)
-		solutionB = day05.SolutionB(input)
+		solutionA = day05.SolutionA
+		solutionB = day05.SolutionB
 	}
-    log.Printf("%s solution a: %v", day, solutionA)
-	log.Printf("%s solution b: %v", day, solutionB)
 
+    timeA := utils.TimeIt(day + " (A)")
+    log.Printf("%s solution a: %v", day, solutionA(input))
+    timeA()
+
+    timeB := utils.TimeIt(day + " (B)")
+	log.Printf("%s solution b: %v", day, solutionB(input))
+    timeB() 
 }
 
 func help() {
