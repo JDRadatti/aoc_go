@@ -12,7 +12,10 @@ type Range struct {
 	End   int
 }
 
-func NewRange(start, end int) Range     { return Range{start, end} }
+func NewRange(start, end int) Range     { 
+    if start > end { start, end = end, start }
+    return Range{start, end} 
+}
 func (r *Range) Contains(elem int) bool { return elem >= r.Start && elem <= r.End }
 func (r *Range) UpdateStart(elem int)   { r.Start = elem }
 func (r *Range) UpdateEnd(elem int)     { r.End = elem }
