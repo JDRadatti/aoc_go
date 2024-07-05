@@ -2,7 +2,6 @@ package rangeset
 
 import (
 	"github.com/JDRadatti/aoc_go/pkg/utils"
-	"log"
 	"slices"
 	"sort"
 )
@@ -134,10 +133,10 @@ func (self *RangeSet) Add(start int, end int) {
 
 func (self *RangeSet) Extend(ranges Ranges) {
 	//sort.Sort(Ranges(ranges))
-    // optimize later
-    for _, r := range ranges {
-        self.Add(r.Start, r.End)
-    }
+	// optimize later
+	for _, r := range ranges {
+		self.Add(r.Start, r.End)
+	}
 }
 
 func (self *RangeSet) Union(other RangeSet) {
