@@ -15,6 +15,11 @@ func NewRange(start, end int) Range     {
     if start > end { start, end = end, start }
     return Range{start, end} 
 }
+func (r *Range) Fix() {
+    if r.Start > r.End { 
+        r.Start, r.End = r.End, r.Start 
+    }
+}
 func (r *Range) Contains(elem int) bool { return elem >= r.Start && elem <= r.End }
 func (r *Range) UpdateStart(elem int)   { r.Start = elem }
 func (r *Range) UpdateEnd(elem int)     { r.End = elem }
@@ -54,14 +59,13 @@ func NewRangeSetFromRanges(ranges Ranges) RangeSet {
 	if len(ranges) == 0 {
 		return rangeSet
 	}
+    for i := range ranges {
+        ranges[i].Fix()
+    }
+
 	sort.Sort(Ranges(ranges))
 	left, right := 0, 1
 	for left < right && left < len(ranges) {
-
-        if ranges[left].Start > ranges[left].End {
-            panic("invalid range")
-        }
-
         var i int
 		for i = right; i < len(ranges); i++ {
 			if ranges[left].End >= ranges[i].Start {

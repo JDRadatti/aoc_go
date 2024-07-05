@@ -148,6 +148,7 @@ func TestNewRangeSetFromRanges(t *testing.T) {
 			{{5, 50}, {10, 15}, {0, 4}, {6, 20}},  // Out of order
 			{{5, 50}},  // Single
 			{{5, 50}, {10, 20}, {20, 30}},  // First dwarfs all others 
+			{{50, 5}, {15, 10}, {4, 0}, {6, 20}}, // Really out of order
 		},
 
 		Expected: []Ranges{
@@ -156,19 +157,8 @@ func TestNewRangeSetFromRanges(t *testing.T) {
 			{{0, 4}, {5, 50}},
 			{{5, 50}},
 			{{5, 50}},
-		},
-	}
-	config.RunNewFromRanges(t)
-
-	config = InputConfig[Ranges]{
-		Ranges: []Range{},
-		InputRanges: []Ranges{
-			{{50, 5}, {15, 10}, {4, 0}, {6, 20}}, // Really out of order
-		},
-
-		Expected: []Ranges{
 			{{0, 4}, {5, 50}},
 		},
 	}
-	assert.Panics(t, func() { config.RunNewFromRanges(t) })
+	config.RunNewFromRanges(t)
 }
