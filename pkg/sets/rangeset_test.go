@@ -10,9 +10,10 @@ import (
 //rangeset.Ranges(rangeset.Ranges{rangeset.Range{0, 5}})
 
 type InputConfig[K any] struct {
-	Ranges   []Range
-	Input    [][]int
-	Expected []K
+	Ranges      []Range
+	Input       [][]int
+	InputRanges []Ranges
+	Expected    []K
 }
 
 func (config *InputConfig[int]) RunSearch(t *testing.T) {
@@ -31,6 +32,14 @@ func (config *InputConfig[Ranges]) RunAdd(t *testing.T) {
 	for i, input := range config.Input {
 		start, end := input[0], input[1]
 		rangeSet.Add(start, end)
+		assert.Equal(t, config.Expected[i], rangeSet.Ranges,
+			fmt.Sprintf("failed at test %d", i))
+	}
+}
+
+func (config *InputConfig[Ranges]) RunNewFromRanges(t *testing.T) {
+	for i := range config.InputRanges {
+		rangeSet := NewRangeSetFromRanges(config.InputRanges[i])
 		assert.Equal(t, config.Expected[i], rangeSet.Ranges,
 			fmt.Sprintf("failed at test %d", i))
 	}
@@ -58,17 +67,6 @@ func TestRangeSetSearch(t *testing.T) {
 	}
 	config.RunSearch(t)
 }
-
-// func TestRangeSetAddSingleRanges(t *testing.T) {
-// 	rangeSet := NewRangeSet()
-// 	// add range 0, 5
-// 	// add range 7,9
-// 	rangeSet.Add(5, 5)
-// 	assert.Equal(t, 0, 0, "Equality of ranges")
-//  what if both end and start are in the same gutter?
-//  what if they one is in the first gutter and last is in the last
-// }
-//
 
 func TestRangeSetAddBasic(t *testing.T) {
 	config := InputConfig[Ranges]{
@@ -139,4 +137,38 @@ func TestRangeSetAddBasic(t *testing.T) {
 	}
 	config.RunAdd(t)
 
+}
+
+func TestNewRangeSetFromRanges(t *testing.T) {
+	config := InputConfig[Ranges]{
+		Ranges: []Range{},
+		InputRanges: []Ranges{
+			{{0, 4}, {5, 5}, {10, 15}},            // Basic use case
+			{{0, 4}, {5, 50}, {10, 15}, {10, 20}}, // Overlapping ranges
+			{{5, 50}, {10, 15}, {0, 4}, {6, 20}},  // Out of order
+			{{5, 50}},  // Single
+			{{5, 50}, {10, 20}, {20, 30}},  // First dwarfs all others 
+		},
+
+		Expected: []Ranges{
+			{{0, 4}, {5, 5}, {10, 15}},
+			{{0, 4}, {5, 50}},
+			{{0, 4}, {5, 50}},
+			{{5, 50}},
+			{{5, 50}},
+		},
+	}
+	config.RunNewFromRanges(t)
+
+	config = InputConfig[Ranges]{
+		Ranges: []Range{},
+		InputRanges: []Ranges{
+			{{50, 5}, {15, 10}, {4, 0}, {6, 20}}, // Really out of order
+		},
+
+		Expected: []Ranges{
+			{{0, 4}, {5, 50}},
+		},
+	}
+	assert.Panics(t, func() { config.RunNewFromRanges(t) })
 }
