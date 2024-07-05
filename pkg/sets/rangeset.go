@@ -48,6 +48,37 @@ func (self *RangeSet) Delete(i, j int) {
 
 func NewRangeSet() RangeSet { return RangeSet{} }
 
+// NewRangeSetFromRanges inits a RangeSet and adds all ranges 
+// NewRangeSetFromRanges panics if any range is invalid(start > end)
+func NewRangeSetFromRanges(ranges Ranges) RangeSet {
+	rangeSet := NewRangeSet()
+	if len(ranges) == 0 {
+		return rangeSet
+	}
+	sort.Sort(Ranges(ranges))
+	left, right := 0, 1
+	for left < right && left < len(ranges) {
+
+        if ranges[left].Start > ranges[left].End {
+            panic("invalid range")
+        }
+
+        var i int
+		for i = right; i < len(ranges); i++ {
+			if ranges[left].End >= ranges[i].Start {
+                newEnd := utils.Max(ranges[i].End, ranges[left].End)
+	            ranges[left].UpdateEnd(newEnd)
+			} else {
+                break
+            }
+		}
+		rangeSet.Ranges = append(rangeSet.Ranges, ranges[left])
+		right = i + 1
+		left = right - 1
+	}
+	return rangeSet
+}
+
 // Add to RangeSet.
 func (self *RangeSet) Add(start int, end int) {
 	if start > end {
