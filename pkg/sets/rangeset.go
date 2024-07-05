@@ -53,7 +53,6 @@ func (self *RangeSet) Delete(i, j int) {
 func NewRangeSet() RangeSet { return RangeSet{} }
 
 // NewRangeSetFromRanges inits a RangeSet and adds all ranges 
-// NewRangeSetFromRanges panics if any range is invalid(start > end)
 func NewRangeSetFromRanges(ranges Ranges) RangeSet {
 	rangeSet := NewRangeSet()
 	if len(ranges) == 0 {
