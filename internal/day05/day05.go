@@ -23,10 +23,6 @@ func (almanac *ParsedAlmanac) ClosestLocation() int {
 
 func (almanac *ParsedAlmanac) ClosestLocationWithSeedRanges() int {
 	var closest int = math.MaxInt
-<<<<<<< HEAD
-=======
-    locations := map[int]int
->>>>>>> 98e97fd016c97cc57d618e0a1b01169f245bd733
 	for i := 1; i < len(almanac.seeds)-1; i += 2 {
 		start := almanac.seeds[i-1]
 		end := start + almanac.seeds[i]
@@ -149,13 +145,4 @@ func SolutionA(input []byte) int {
 		panic(err)
 	}
 	return parsedAlmanac.ClosestLocation()
-}
-
-// https://adventofcode.com/2023/day/5
-func SolutionB(input []byte) int {
-	parsedAlmanac, err := NewParsedAlmanac(input)
-	if err != nil {
-		panic(err)
-	}
-	return parsedAlmanac.ClosestLocationWithSeedRanges()
 }
