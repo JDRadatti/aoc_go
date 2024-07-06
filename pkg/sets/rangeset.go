@@ -77,7 +77,7 @@ func NewRangeSetFromRanges(ranges Ranges) RangeSet {
 	for left < right && left < len(ranges) {
 		var i int
 		for i = right; i < len(ranges); i++ {
-			if ranges[left].End >= ranges[i].Start {
+			if ranges[left].End >= ranges[i].Start-1 {
 				newEnd := utils.Max(ranges[i].End, ranges[left].End)
 				ranges[left].UpdateEnd(newEnd)
 			} else {
