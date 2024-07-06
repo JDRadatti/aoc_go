@@ -175,7 +175,8 @@ func (self *RangeSet) Intersection(other RangeSet) RangeSet {
 func (self *RangeSet) Difference(other RangeSet) {
 }
 
-func (self *RangeSet) Contains() {
+func (self *RangeSet) Contains(i int) bool {
+	return self.Ranges[self.Search(i)].Contains(i)
 }
 
 func (self *RangeSet) Empty() bool {
