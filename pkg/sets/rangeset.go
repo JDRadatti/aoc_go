@@ -11,18 +11,28 @@ type Range struct {
 	End   int
 }
 
-func NewRange(start, end int) Range     { 
-    if start > end { start, end = end, start }
-    return Range{start, end} 
+func NewRange(start, end int) Range {
+	if start > end {
+		start, end = end, start
+	}
+	return Range{start, end}
 }
 func (r *Range) Fix() {
-    if r.Start > r.End { 
-        r.Start, r.End = r.End, r.Start 
-    }
+	if r.Start > r.End {
+		r.Start, r.End = r.End, r.Start
+	}
 }
-func (r *Range) Contains(elem int) bool { return elem >= r.Start && elem <= r.End }
-func (r *Range) UpdateStart(elem int)   { r.Start = elem }
-func (r *Range) UpdateEnd(elem int)     { r.End = elem }
+
+func (r *Range) Intersects(other Range) bool {
+	return r.Contains(other.Start) ||
+		r.Contains(other.End) ||
+		other.Contains(r.Start) ||
+		other.Contains(r.End)
+}
+
+func (r *Range) Contains(i int) bool  { return i >= r.Start && i <= r.End }
+func (r *Range) UpdateStart(elem int) { r.Start = elem }
+func (r *Range) UpdateEnd(elem int)   { r.End = elem }
 func (r *Range) Compare(elem int) int {
 	if elem < r.Start {
 		return -1
