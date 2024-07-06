@@ -45,6 +45,19 @@ func (config *InputConfig[Ranges]) RunNewFromRanges(t *testing.T) {
 	}
 }
 
+// Note: Uses InputRange i and i+1 as input for all even i in InputRange
+func (config *InputConfig[Ranges]) RunIntersection(t *testing.T) {
+	j := 0
+	for i := 1; i < len(config.InputRanges); i += 2 {
+		rangeSet0 := NewRangeSetFromRanges(config.InputRanges[i-1])
+		rangeSet1 := NewRangeSetFromRanges(config.InputRanges[i])
+		outputSet := rangeSet0.Intersection(rangeSet1)
+		assert.Equal(t, config.Expected[j], outputSet.Ranges,
+			fmt.Sprintf("failed at test %d", i))
+		j++
+	}
+}
+
 func TestRangeSetSearch(t *testing.T) {
 	// Test assumes non-decreasing first terms in ranges
 	config := InputConfig[int]{
@@ -146,9 +159,9 @@ func TestNewRangeSetFromRanges(t *testing.T) {
 			{{0, 4}, {5, 5}, {10, 15}},            // Basic use case
 			{{0, 4}, {5, 50}, {10, 15}, {10, 20}}, // Overlapping ranges
 			{{5, 50}, {10, 15}, {0, 4}, {6, 20}},  // Out of order
-			{{5, 50}},  // Single
-			{{5, 50}, {10, 20}, {20, 30}},  // First dwarfs all others 
-			{{50, 5}, {15, 10}, {4, 0}, {6, 20}}, // Really out of order
+			{{5, 50}},                             // Single
+			{{5, 50}, {10, 20}, {20, 30}},         // First dwarfs all others
+			{{50, 5}, {15, 10}, {4, 0}, {6, 20}},  // Really out of order
 		},
 
 		Expected: []Ranges{
@@ -161,4 +174,38 @@ func TestNewRangeSetFromRanges(t *testing.T) {
 		},
 	}
 	config.RunNewFromRanges(t)
+}
+
+func TestIntersecton(t *testing.T) {
+	config := InputConfig[Ranges]{
+		InputRanges: []Ranges{
+			{{0, 10}}, // Test 1
+			{{1, 4}},  // Test 1
+
+			{{0, 10}, {20, 30}, {40, 50}, {60, 70}}, // Test 2
+			{{80, 90}},                              // Test 2
+
+			{{0, 10}, {20, 30}, {40, 50}, {60, 70}}, // Test 2
+			{{5, 45}},                               // Test 2
+
+			{{5, 45}},
+			{{0, 10}, {20, 30}, {40, 50}, {60, 70}},
+
+			{{5, 45}, {46, 100}},
+			{{5, 45}, {46, 100}},
+
+            {}, 
+            {},
+		},
+
+		Expected: []Ranges{
+			{{1, 4}},                      // test 1 expected
+			nil,                           // test 2
+			{{5, 10}, {20, 30}, {40, 45}}, // test 3
+			{{5, 10}, {20, 30}, {40, 45}},
+			{{5, 45}, {46, 100}},
+            nil,
+		},
+	}
+	config.RunIntersection(t)
 }

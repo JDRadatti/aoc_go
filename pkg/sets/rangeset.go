@@ -156,6 +156,20 @@ func (self *RangeSet) Union(other RangeSet) {
 }
 
 func (self *RangeSet) Intersection(other RangeSet) {
+
+func (self *RangeSet) Intersection(other RangeSet) RangeSet {
+	intersecting := NewRangeSet()
+	for _, selfRange := range self.Ranges {
+		start, end := other.Search(selfRange.Start), other.Search(selfRange.End)
+		for _, otherRange := range other.Ranges[start : end+1] {
+			if selfRange.Intersects(otherRange) {
+				intersection := NewRange(utils.Max(selfRange.Start, otherRange.Start),
+					utils.Min(selfRange.End, otherRange.End))
+				intersecting.Ranges = append(intersecting.Ranges, intersection)
+			}
+		}
+	}
+	return intersecting
 }
 
 func (self *RangeSet) Difference(other RangeSet) {
