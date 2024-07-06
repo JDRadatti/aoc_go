@@ -188,8 +188,8 @@ func TestNewRangeSetFromRanges(t *testing.T) {
 			{{5, 50}},                             // Single
 			{{5, 50}, {10, 20}, {20, 30}},         // First dwarfs all others
 			{{50, 5}, {15, 10}, {4, 0}, {6, 20}},  // Really out of order
-            {{1, 2}, {3, 4}},
-            {{1,1}, {2,2}, {3, 3}},
+			{{1, 2}, {3, 4}},
+			{{1, 1}, {2, 2}, {3, 3}},
 		},
 
 		Expected: []Ranges{
@@ -199,13 +199,12 @@ func TestNewRangeSetFromRanges(t *testing.T) {
 			{{5, 50}},
 			{{5, 50}},
 			{{0, 50}},
-            {{1, 4}},
-            {{1, 3}},
+			{{1, 4}},
+			{{1, 3}},
 		},
 	}
 	config.RunNewFromRanges(t)
 }
-
 
 func TestUnion(t *testing.T) {
 	config := InputConfig[Ranges]{
@@ -225,17 +224,17 @@ func TestUnion(t *testing.T) {
 			{{5, 45}, {46, 100}},
 			{{5, 45}, {48, 100}},
 
-            {}, 
-            {},
+			{},
+			{},
 		},
 
 		Expected: []Ranges{
-			{{0, 10}},                      // test 1 expected
+			{{0, 10}}, // test 1 expected
 			{{0, 10}, {20, 30}, {40, 50}, {60, 70}, {80, 90}}, // Test 2
 			{{0, 50}, {60, 70}}, // test 3
-			{{0, 50}, {60, 70}}, 
+			{{0, 50}, {60, 70}},
 			{{5, 100}},
-			nil,                      // test 1 expected
+			nil, // test 1 expected
 		},
 	}
 	config.RunUnion(t)
@@ -259,8 +258,8 @@ func TestIntersecton(t *testing.T) {
 			{{5, 45}, {46, 100}},
 			{{5, 45}, {46, 100}},
 
-            {}, 
-            {},
+			{},
+			{},
 		},
 
 		Expected: []Ranges{
@@ -269,8 +268,46 @@ func TestIntersecton(t *testing.T) {
 			{{5, 10}, {20, 30}, {40, 45}}, // test 3
 			{{5, 10}, {20, 30}, {40, 45}},
 			{{5, 100}},
-            nil,
+			nil,
 		},
 	}
 	config.RunIntersection(t)
+}
+
+func TestDifference(t *testing.T) {
+	config := InputConfig[Ranges]{
+		InputRanges: []Ranges{
+			{{0, 10}}, // Test 0
+			{{1, 4}},  // Test 0
+
+			{{0, 10}, {20, 30}, {40, 50}, {60, 70}}, // Test 1
+			{{80, 90}},                              // Test 1
+
+			{{0, 10}, {20, 30}, {40, 50}, {60, 70}}, // Test 2
+			{{5, 45}},                               // Test 2
+
+			{{5, 45}},
+			{{0, 10}, {20, 30}, {40, 50}, {60, 70}},
+
+			{{5, 45}, {46, 100}},
+			{{5, 45}, {48, 100}},
+
+			{},
+			{},
+
+			{{10, 20}},
+			{{1, 2}, {4, 4}, {6, 9}},
+		},
+
+		Expected: []Ranges{
+			{{0, 0}, {5, 10}},                       // test 0 expected
+			{{0, 10}, {20, 30}, {40, 50}, {60, 70}}, // Test 1
+			{{0, 4}, {46, 50}, {60, 70}},            // test 2
+			{{11, 19}, {31, 39}},
+			{{46, 47}},
+			nil,
+			{{10, 20}},
+		},
+	}
+	config.RunDifference(t)
 }
