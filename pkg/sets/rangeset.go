@@ -172,7 +172,30 @@ func (self *RangeSet) Intersection(other RangeSet) RangeSet {
 	return intersecting
 }
 
-func (self *RangeSet) Difference(other RangeSet) {
+func (self *RangeSet) Difference(other RangeSet) RangeSet {
+	difference := NewRangeSet()
+	for _, selfRange := range self.Ranges {
+		start, end := other.Search(selfRange.Start), other.Search(selfRange.End)
+		for i, otherRange := range other.Ranges[start : end+1] {
+			if i == 0 && selfRange.Start < otherRange.Start {
+				// First of other ranges; append front tail
+				difference.Ranges = append(difference.Ranges,
+					NewRange(selfRange.Start,
+						utils.Min(selfRange.End, otherRange.Start-1)))
+			}
+			if start+i+1 <= end {
+				difference.Ranges = append(difference.Ranges,
+					NewRange(utils.Max(selfRange.Start, otherRange.End+1),
+						utils.Min(selfRange.End, other.Ranges[i+1].Start-1)))
+			} else if selfRange.End > otherRange.End {
+				// Last of other ranges; append tail
+				difference.Ranges = append(difference.Ranges,
+					NewRange(utils.Max(otherRange.End+1, selfRange.Start),
+						selfRange.End))
+			}
+		}
+	}
+	return difference
 }
 
 func (self *RangeSet) Contains(i int) bool {
