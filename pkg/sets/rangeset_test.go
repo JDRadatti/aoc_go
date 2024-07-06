@@ -53,7 +53,7 @@ func (config *InputConfig[Ranges]) RunIntersection(t *testing.T) {
 		rangeSet1 := NewRangeSetFromRanges(config.InputRanges[i])
 		outputSet := rangeSet0.Intersection(rangeSet1)
 		assert.Equal(t, config.Expected[j], outputSet.Ranges,
-			fmt.Sprintf("failed at test %d", i))
+			fmt.Sprintf("failed at test %d", j))
 		j++
 	}
 }
@@ -66,7 +66,20 @@ func (config *InputConfig[Ranges]) RunUnion(t *testing.T) {
 		rangeSet1 := NewRangeSetFromRanges(config.InputRanges[i])
 		outputSet := rangeSet0.Union(rangeSet1)
 		assert.Equal(t, config.Expected[j], outputSet.Ranges,
-			fmt.Sprintf("failed at test %d", i))
+			fmt.Sprintf("failed at test %d", j))
+		j++
+	}
+}
+
+// Note: Uses InputRange i and i+1 as input for all even i in InputRange
+func (config *InputConfig[Ranges]) RunDifference(t *testing.T) {
+	j := 0
+	for i := 1; i < len(config.InputRanges); i += 2 {
+		rangeSet0 := NewRangeSetFromRanges(config.InputRanges[i-1])
+		rangeSet1 := NewRangeSetFromRanges(config.InputRanges[i])
+		outputSet := rangeSet0.Difference(rangeSet1)
+		assert.Equal(t, config.Expected[j], outputSet.Ranges,
+			fmt.Sprintf("failed at test %d", j))
 		j++
 	}
 }
