@@ -58,6 +58,19 @@ func (config *InputConfig[Ranges]) RunIntersection(t *testing.T) {
 	}
 }
 
+// Note: Uses InputRange i and i+1 as input for all even i in InputRange
+func (config *InputConfig[Ranges]) RunUnion(t *testing.T) {
+	j := 0
+	for i := 1; i < len(config.InputRanges); i += 2 {
+		rangeSet0 := NewRangeSetFromRanges(config.InputRanges[i-1])
+		rangeSet1 := NewRangeSetFromRanges(config.InputRanges[i])
+		outputSet := rangeSet0.Union(rangeSet1)
+		assert.Equal(t, config.Expected[j], outputSet.Ranges,
+			fmt.Sprintf("failed at test %d", i))
+		j++
+	}
+}
+
 func TestRangeSetSearch(t *testing.T) {
 	// Test assumes non-decreasing first terms in ranges
 	config := InputConfig[int]{
@@ -162,18 +175,57 @@ func TestNewRangeSetFromRanges(t *testing.T) {
 			{{5, 50}},                             // Single
 			{{5, 50}, {10, 20}, {20, 30}},         // First dwarfs all others
 			{{50, 5}, {15, 10}, {4, 0}, {6, 20}},  // Really out of order
+            {{1, 2}, {3, 4}},
+            {{1,1}, {2,2}, {3, 3}},
 		},
 
 		Expected: []Ranges{
-			{{0, 4}, {5, 5}, {10, 15}},
-			{{0, 4}, {5, 50}},
-			{{0, 4}, {5, 50}},
+			{{0, 5}, {10, 15}},
+			{{0, 50}},
+			{{0, 50}},
 			{{5, 50}},
 			{{5, 50}},
-			{{0, 4}, {5, 50}},
+			{{0, 50}},
+            {{1, 4}},
+            {{1, 3}},
 		},
 	}
 	config.RunNewFromRanges(t)
+}
+
+
+func TestUnion(t *testing.T) {
+	config := InputConfig[Ranges]{
+		InputRanges: []Ranges{
+			{{0, 10}}, // Test 1
+			{{1, 4}},  // Test 1
+
+			{{0, 10}, {20, 30}, {40, 50}, {60, 70}}, // Test 2
+			{{80, 90}},                              // Test 2
+
+			{{0, 10}, {20, 30}, {40, 50}, {60, 70}}, // Test 2
+			{{5, 45}},                               // Test 2
+
+			{{5, 45}},
+			{{0, 10}, {20, 30}, {40, 50}, {60, 70}},
+
+			{{5, 45}, {46, 100}},
+			{{5, 45}, {48, 100}},
+
+            {}, 
+            {},
+		},
+
+		Expected: []Ranges{
+			{{0, 10}},                      // test 1 expected
+			{{0, 10}, {20, 30}, {40, 50}, {60, 70}, {80, 90}}, // Test 2
+			{{0, 50}, {60, 70}}, // test 3
+			{{0, 50}, {60, 70}}, 
+			{{5, 100}},
+			nil,                      // test 1 expected
+		},
+	}
+	config.RunUnion(t)
 }
 
 func TestIntersecton(t *testing.T) {
@@ -203,7 +255,7 @@ func TestIntersecton(t *testing.T) {
 			nil,                           // test 2
 			{{5, 10}, {20, 30}, {40, 45}}, // test 3
 			{{5, 10}, {20, 30}, {40, 45}},
-			{{5, 45}, {46, 100}},
+			{{5, 100}},
             nil,
 		},
 	}

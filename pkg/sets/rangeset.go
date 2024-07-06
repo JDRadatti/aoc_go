@@ -152,10 +152,10 @@ func (self *RangeSet) Extend(ranges Ranges) {
 	}
 }
 
-func (self *RangeSet) Union(other RangeSet) {
+func (self *RangeSet) Union(other RangeSet) RangeSet {
+	allRanges := append(self.Ranges, other.Ranges...)
+	return NewRangeSetFromRanges(allRanges)
 }
-
-func (self *RangeSet) Intersection(other RangeSet) {
 
 func (self *RangeSet) Intersection(other RangeSet) RangeSet {
 	intersecting := NewRangeSet()
