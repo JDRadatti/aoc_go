@@ -2,14 +2,14 @@ package day06
 
 import "testing"
 
-func TestDay05a(t *testing.T) {
+func TestDay06a(t *testing.T) {
 	inputs := [][]byte{
 		[]byte(`Time:      7  15   30
 Distance:  9  40  200
 `),
 	}
 	expected := [...]int{
-        0,
+        288,
 	}
 	for i := 0; i < len(inputs); i++ {
 		result := SolutionA(inputs[i])
@@ -20,7 +20,7 @@ Distance:  9  40  200
 	}
 }
 
-func TestDay05b(t *testing.T) {
+func TestDay06b(t *testing.T) {
 	inputs := [][]byte{
 		[]byte(`Time:      7  15   30
 Distance:  9  40  200
