@@ -27,7 +27,7 @@ Distance:  9  40  200
 `),
 	}
 	expected := [...]int{
-		0,
+		71503,
 	}
 	for i := 0; i < len(inputs); i++ {
 		result := SolutionB(inputs[i])
