@@ -23,11 +23,14 @@ func (g LRGraph) AddNode(node []byte) bool {
 
 func (g LRGraph) Search(instructions []int, start, end string) int {
 	i, steps := 0, 0
-    currIndex, endIndex := string(start), string(end)
-	for currIndex != endIndex {
-		currIndex = g[currIndex][instructions[i]]
+	for start != end {
+		start = g.Next(instructions[i], start)
 		i = (i + 1) % len(instructions)
 		steps++
 	}
 	return steps
+}
+
+func (g LRGraph) Next(instruction int, start string) string {
+	return g[start][instruction]
 }
