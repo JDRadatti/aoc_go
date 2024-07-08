@@ -52,6 +52,9 @@ func run(day string) {
 	case "day08":
 		solutionA = day08.SolutionA
 		solutionB = day08.SolutionB
+	case "day09":
+		solutionA = day08.SolutionA
+		solutionB = day08.SolutionB
 	}
 
 	timeA := utils.TimeIt(day + " (A)")
@@ -76,12 +79,8 @@ FLAGS:
 
 func generate(day string) {
 	path := filepath.Join("internal", day)
-	_, err := os.Stat(path)
-	if !os.IsExist(err) {
-		log.Fatal("D" + day[1:] + " already exists")
-	}
 
-	err = os.Mkdir(path, 0750)
+	err := os.Mkdir(path, 0750)
 	if err != nil && !os.IsExist(err) {
 		log.Fatal(err)
 	}
