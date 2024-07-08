@@ -9,7 +9,7 @@ func TestDay08a(t *testing.T) {
 		[]byte(``),
 	}
 	expected := [...]int{
-		6440,
+		0,
 	}
 	for i := 0; i < len(inputs); i++ {
 		result := SolutionA(inputs[i])
