@@ -1,9 +1,9 @@
 package graphs
 
 import (
-    "regexp"
-    "strings"
-    "fmt"
+	"fmt"
+	"regexp"
+	"strings"
 )
 
 const allowedChars string = "[A-Z1-9]"
@@ -45,7 +45,7 @@ func (g LRGraph) Next(instruction int, start string) string {
 // NodeMatch determines if node N1 is the same as node N2
 // NodeMatch allows * characters in N2 to match with any allowed characters
 func (g LRGraph) NodeMatch(n1, n2 string) bool {
-    s := strings.ReplaceAll(n2, "*", allowedChars)
-    re, _ := regexp.Compile(s)
-    return re.MatchString(n1)
+	s := strings.ReplaceAll(n2, "*", allowedChars)
+	re, _ := regexp.Compile(s)
+	return re.MatchString(n1)
 }
