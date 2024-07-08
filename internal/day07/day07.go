@@ -8,18 +8,23 @@ import (
 
 // https://adventofcode.com/2023/day/7
 func SolutionA(input []byte) int {
-	hands := ParseHands(bytes.Split(input, []byte("\n")))
+	return RunGame(input, false)
+}
+
+// https://adventofcode.com/2023/day/7
+func SolutionB(input []byte) int {
+	LabelStrength['J'] = -1
+	return RunGame(input, true)
+}
+
+func RunGame(input []byte, wildJokers bool) int {
+	hands := ParseHands(bytes.Split(input, []byte("\n")), wildJokers)
 	sort.Sort(hands)
 	sum := 0
 	for i, hand := range hands {
 		sum += (i + 1) * hand.Bid
 	}
 	return sum
-}
-
-// https://adventofcode.com/2023/day/7
-func SolutionB(input []byte) int {
-	return 0
 }
 
 type Label int
@@ -66,8 +71,7 @@ func (h Hand) Compare(other Hand) int {
 
 type Hands []Hand
 
-func ParseHands(handsInput [][]byte) Hands {
-
+func ParseHands(handsInput [][]byte, wildJokers bool) Hands {
 	hands := Hands{}
 	for _, hand := range handsInput {
 		split := bytes.Split(hand, []byte(" "))
@@ -80,6 +84,18 @@ func ParseHands(handsInput [][]byte) Hands {
 		for i, label := range split[0] {
 			labels[i] = LabelStrength[label]
 			counts[labels[i]]++
+		}
+
+		if wildJokers && counts[LabelStrength['J']] > 0 {
+			maxLabel, maxCount := Label(' '), 0
+			for label, count := range counts {
+				if maxCount < count && label != LabelStrength['J'] {
+					maxCount = count
+					maxLabel = label
+				}
+			}
+			counts[maxLabel] += counts[LabelStrength['J']]
+			counts[LabelStrength['J']] = 0
 		}
 
 		var handScore int

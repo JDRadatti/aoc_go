@@ -25,11 +25,15 @@ QQQJA 483
 
 func TestDay07b(t *testing.T) {
 	inputs := [][]byte{
-		[]byte(`
+		[]byte(`32T3K 765
+T55J5 684
+KK677 28
+KTJJT 220
+QQQJA 483
 `),
 	}
 	expected := [...]int{
-		0,
+		5905,
 	}
 	for i := 0; i < len(inputs); i++ {
 		result := SolutionB(inputs[i])
