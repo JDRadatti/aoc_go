@@ -14,16 +14,16 @@ EEE = (EEE, EEE)
 GGG = (GGG, GGG)
 ZZZ = (ZZZ, ZZZ)
 `),
-        []byte(`LLR
+		[]byte(`LLR
 
 AAA = (BBB, BBB)
 BBB = (AAA, ZZZ)
 ZZZ = (ZZZ, ZZZ)
 `),
-    }
+	}
 	expected := [...]int{
-		2, 
-        6,
+		2,
+		6,
 	}
 	for i := 0; i < len(inputs); i++ {
 		result := SolutionA(inputs[i])
@@ -36,26 +36,20 @@ ZZZ = (ZZZ, ZZZ)
 
 func TestDay08b(t *testing.T) {
 	inputs := [][]byte{
-		[]byte(`RL
+		[]byte(`LR
 
-AAA = (BBB, CCC)
-BBB = (DDD, EEE)
-CCC = (ZZZ, GGG)
-DDD = (DDD, DDD)
-EEE = (EEE, EEE)
-GGG = (GGG, GGG)
-ZZZ = (ZZZ, ZZZ)
+11A = (11B, XXX)
+11B = (XXX, 11Z)
+11Z = (11B, XXX)
+22A = (22B, XXX)
+22B = (22C, 22C)
+22C = (22Z, 22Z)
+22Z = (22B, 22B)
+XXX = (XXX, XXX)
 `),
-        []byte(`LLR
-
-AAA = (BBB, BBB)
-BBB = (AAA, ZZZ)
-ZZZ = (ZZZ, ZZZ)
-`),
-    }
+	}
 	expected := [...]int{
-		0, 
-        0,
+		6,
 	}
 	for i := 0; i < len(inputs); i++ {
 		result := SolutionB(inputs[i])
