@@ -59,9 +59,19 @@ func Max(x int, y int) int {
 
 // BAtoI converts a Byte Array to Int
 func BAtoI(bytes []byte) int {
-	value := 0
-	for i := range bytes {
-		value = value*10 + int(bytes[i]) - '0'
+	start, value := 0, 0
+    if bytes[0] == '-' {
+        start = 1
+        if len(bytes) == 1 {
+            panic("invalid input to utils.BAtoI")
+        }
+    }
+    for _, b := range bytes[start:] {
+		value = value*10 + int(b) - '0'
 	}
+
+    if bytes[0] == '-' {
+        return -value
+    }
 	return value
 }
