@@ -7,19 +7,23 @@ import (
 
 // https://adventofcode.com/2023/day/
 func SolutionA(input []byte) int {
-	history := Init(input)
-	sum := 0
-	for _, h := range history {
-		lastRow := Base(h)
-		nextRow := Next(lastRow)
-		sum += nextRow[0]
-	}
-	return sum
+	return SumNext(input, false)
 }
 
 // https://adventofcode.com/2023/day/
 func SolutionB(input []byte) int {
-	return 0
+	return SumNext(input, true)
+}
+
+func SumNext(input []byte, first bool) int {
+	history := Init(input)
+	sum := 0
+	for _, h := range history {
+		lastRow := Base(h, first)
+		nextRow := Next(lastRow, first)
+		sum += nextRow[0]
+	}
+	return sum
 }
 
 func Init(input []byte) [][]int {
@@ -41,12 +45,10 @@ func Init(input []byte) [][]int {
 // RightMost finds the base of the history pyramid
 // After finding the base, returns the rightmost column
 // a b c d -- history
-//
-//	e f g
-//	 h i -- base when all are 0
-//
-// Return [d,g,i]
-func Base(history []int) []int {
+// e f g
+// h i -- base when all are 0
+// Return [a,e,h] if first, else [d,g,i]
+func Base(history []int, first bool) []int {
 	levels := [][]int{history}
 	var all0 bool
 	for !all0 {
@@ -66,6 +68,8 @@ func Base(history []int) []int {
 	for _, l := range levels {
 		if len(l) == 0 {
 			lastRow = append(lastRow, 0)
+		} else if first {
+			lastRow = append(lastRow, l[0])
 		} else {
 			lastRow = append(lastRow, l[len(l)-1])
 		}
@@ -75,16 +79,21 @@ func Base(history []int) []int {
 
 // Next returns the next LastRow of the pyramid
 // a b c d
-//
-//	e f g
-//	 h i
-//
-// If input = [c, d, h] -> return [d, g, i]
-func Next(lastRow []int) []int {
+// e f g
+// h i
+// When first; input = [b, f, i] -> return [a, e, h]
+// Else; input = [c, f, h] -> return [d, g, i]
+func Next(lastRow []int, first bool) []int {
 	nextRow := make([]int, len(lastRow))
 	copy(nextRow, lastRow)
+
+	sign := 1
+	if first {
+		sign = -sign
+	}
+
 	for i := len(lastRow) - 3; i >= 0; i-- {
-		nextRow[i] = lastRow[i] + nextRow[i+1]
+		nextRow[i] = lastRow[i] + sign*nextRow[i+1]
 	}
 	return nextRow
 }
