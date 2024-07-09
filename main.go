@@ -11,6 +11,7 @@ import (
 	"github.com/JDRadatti/aoc_go/internal/day07"
 	"github.com/JDRadatti/aoc_go/internal/day08"
 	"github.com/JDRadatti/aoc_go/internal/day09"
+	"github.com/JDRadatti/aoc_go/internal/day10"
 	"github.com/JDRadatti/aoc_go/pkg/utils"
 	"log"
 	"os"
@@ -56,6 +57,9 @@ func run(day string) {
 	case "day09":
 		solutionA = day09.SolutionA
 		solutionB = day09.SolutionB
+	case "day10":
+		solutionA = day10.SolutionA
+		solutionB = day10.SolutionB
 	}
 
 	timeA := utils.TimeIt(day + " (A)")
