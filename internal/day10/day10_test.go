@@ -1,15 +1,25 @@
 package day10
 
 import (
-    "testing"
+	"testing"
 )
 
 func TestDay10a(t *testing.T) {
 	inputs := [][]byte{
-		[]byte(``),
+		[]byte(`.....
+.S-7.
+.|.|.
+.L-J.
+.....`),
+		[]byte(`7-F7-
+.FJ|7
+SJLL7
+|F--J
+LJ.LJ
+`),
 	}
 	expected := [...]int{
-		0,
+		4, 8,
 	}
 	for i := 0; i < len(inputs); i++ {
 		result := SolutionA(inputs[i])
@@ -35,3 +45,4 @@ func TestDay10b(t *testing.T) {
 		}
 	}
 }
+
