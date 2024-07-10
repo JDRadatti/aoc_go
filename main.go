@@ -4,7 +4,7 @@ import (
 	"github.com/JDRadatti/aoc_go/inputs"
 	"github.com/JDRadatti/aoc_go/internal/day01"
 	"github.com/JDRadatti/aoc_go/internal/day02"
-	"github.com/JDRadatti/aoc_go/internal/day03"
+	//"github.com/JDRadatti/aoc_go/internal/day03"
 	"github.com/JDRadatti/aoc_go/internal/day04"
 	"github.com/JDRadatti/aoc_go/internal/day05"
 	"github.com/JDRadatti/aoc_go/internal/day06"
@@ -36,9 +36,9 @@ func run(day string) {
 	case "day02":
 		solutionA = day02.SolutionA
 		solutionB = day02.SolutionB
-	case "day03":
-		solutionA = day03.SolutionA
-		solutionB = day03.SolutionB
+	// case "day03":
+	// 	solutionA = day03.SolutionA
+	// 	solutionB = day03.SolutionB
 	case "day04":
 		solutionA = day04.SolutionA
 		solutionB = day04.SolutionB
